@@ -12,6 +12,15 @@ const (
 	AdminToken = "admin_token"
 )
 
+func newTestBanner() *models.Banner {
+	return &models.Banner{
+		TagIds:    []int{1, 2, 3},
+		Content:   "{\"text\": \"Только сегодня и только у нас, скидка 99.9%...\"}",
+		FeatureId: 0,
+		IsActive:  false,
+	}
+}
+
 func SetupE2ETest(t *testing.T) (*PublicController, *gin.Engine) {
 	dbconf, err := models.DBConfigFromEnv("../test.env")
 	if err != nil {

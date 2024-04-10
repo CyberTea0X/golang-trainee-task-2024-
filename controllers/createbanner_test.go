@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"gobanner/models"
 	"net/http"
 	"net/http/httptest"
@@ -15,12 +16,9 @@ func TestCreateBannerSucceed(t *testing.T) {
 	pCtrl, router := SetupE2ETest(t)
 
 	w := httptest.NewRecorder()
-	banner := new(models.Banner)
-	banner.Content = "{\"text\": \"Только сегодня и только у нас, скидка 99.9%...\"}"
-	banner.IsActive = true
-	banner.FeatureId = 1
-	banner.TagIds = []int{1, 2, 3, 4}
-	body, err := json.Marshal(&banner)
+	banner := newTestBanner()
+	body, err := json.Marshal(banner)
+	fmt.Println(string(body))
 	if err != nil {
 		t.Fatal(err)
 	}

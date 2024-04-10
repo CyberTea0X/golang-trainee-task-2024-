@@ -21,3 +21,12 @@ func (b *Banner) InsertToDB(db Database) (int64, error) {
 	}
 	return lastInsertId, nil
 }
+
+func DeleteBannerFromDB(db Database, id int64) error {
+	const query = "DELETE FROM banners WHERE id=$1"
+	_, err := db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

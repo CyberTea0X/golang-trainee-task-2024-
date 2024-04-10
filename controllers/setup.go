@@ -21,5 +21,6 @@ func SetupRouter(p *PublicController) *gin.Engine {
 	admin := r.Group("/")
 	admin.Use(middleware.TokenAuth(middleware.AdminToken))
 	admin.POST("/banner", p.createBanner)
+	admin.DELETE("/banner/:id", p.deleteBanner)
 	return r
 }
