@@ -7,6 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	UserToken  = "user_token"
+	AdminToken = "admin_token"
+)
+
 func SetupE2ETest(t *testing.T) (*PublicController, *gin.Engine) {
 	dbconf, err := models.DBConfigFromEnv("../test.env")
 	if err != nil {

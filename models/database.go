@@ -10,6 +10,15 @@ import (
 	_ "github.com/lib/pq"
 )
 
+const bannersDDL = `CREATE TABLE IF NOT EXISTS public.banners (
+    id serial4 NOT NULL,
+    "content" json NOT NULL,
+    feature_id int4 NOT NULL,
+    tag_ids _int4 NOT NULL,
+    is_active bool NOT NULL,
+    CONSTRAINT banners_pk PRIMARY KEY (id)
+);`
+
 type Database interface {
 	// Exec executes a query without returning any rows. The args are for any placeholder parameters in the query.
 	Exec(query string, args ...any) (sql.Result, error)
@@ -56,6 +65,10 @@ func SetupDatabase(c *DatabaseConfig) (*sql.DB, error) {
 	db, err := sql.Open("postgres", url)
 	if err != nil {
 		return nil, errors.Join(errors.New("failed to connect to the database"), err)
+	}
+	_, err = db.Exec(bannersDDL)
+	if err != nil {
+		return nil, errors.Join(errors.New("failed to automigrate to the database"), err)
 	}
 	return db, nil
 }

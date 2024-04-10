@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreate(t *testing.T) {
+func TestCreateBannerSucceed(t *testing.T) {
 	pCtrl, router := SetupE2ETest(t)
 
 	w := httptest.NewRecorder()
@@ -26,6 +26,7 @@ func TestCreate(t *testing.T) {
 	}
 	r := bytes.NewReader(body)
 	req, _ := http.NewRequest("POST", "/banner", r)
+	req.Header.Add("token", AdminToken)
 	router.ServeHTTP(w, req)
 	assert.Equal(t, 201, w.Code)
 	_, err = models.CleanDatabase(pCtrl.db)
