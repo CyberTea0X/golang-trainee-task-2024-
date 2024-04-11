@@ -6,14 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type TokenType int
-
-const (
-	AnyToken TokenType = iota
-	AdminToken
-)
-
-func TokenAuth(t TokenType) gin.HandlerFunc {
+func AdminAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("token")
 		if token == "" {
@@ -21,12 +14,27 @@ func TokenAuth(t TokenType) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if t == AdminToken && token != "admin_token" {
+		if token != "admin_token" {
 			c.Status(http.StatusForbidden)
 			c.Abort()
 			return
 		}
-		c.Next()
-		return
+	}
+}
+
+func UserAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.GetHeader("token")
+		if token == "" {
+			c.Status(http.StatusUnauthorized)
+			c.Abort()
+			return
+		}
+		// Почти полностью повторяет AdminAuth, но не хочу усложнять логику пока что
+		if token != "admin_token" && token != "user_token" {
+			c.Status(http.StatusForbidden)
+			c.Abort()
+			return
+		}
 	}
 }

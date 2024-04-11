@@ -19,7 +19,7 @@ func NewPublicController(db models.Database) *PublicController {
 func SetupRouter(p *PublicController) *gin.Engine {
 	r := gin.Default()
 	admin := r.Group("/")
-	admin.Use(middleware.TokenAuth(middleware.AdminToken))
+	admin.Use(middleware.AdminAuth())
 	admin.POST("/banner", p.createBanner)
 	admin.DELETE("/banner/:id", p.deleteBanner)
 	return r
