@@ -1,17 +1,17 @@
 package controllers
 
 import (
+	"database/sql"
 	middleware "gobanner/middlewares"
-	"gobanner/models"
 
 	"github.com/gin-gonic/gin"
 )
 
 type PublicController struct {
-	db models.Database
+	db *sql.DB
 }
 
-func NewPublicController(db models.Database) *PublicController {
+func NewPublicController(db *sql.DB) *PublicController {
 	return &PublicController{db}
 }
 

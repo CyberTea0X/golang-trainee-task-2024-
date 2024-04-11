@@ -24,17 +24,6 @@ const bannersDDL = `CREATE TABLE IF NOT EXISTS public.banners (
     CONSTRAINT banners_pk PRIMARY KEY (id)
 );`
 
-type Database interface {
-	// Exec executes a query without returning any rows. The args are for any placeholder parameters in the query.
-	Exec(query string, args ...any) (sql.Result, error)
-	// QueryRow executes a query that is expected to return at most one row.
-	// QueryRow always returns a non-nil value. Errors are deferred until Row's
-	// Scan method is called. If the query selects no rows, the *Row.Scan will
-	// return ErrNoRows. Otherwise, *Row.Scan scans the first selected row and
-	// discards the rest.
-	QueryRow(query string, args ...any) *sql.Row
-}
-
 type DatabaseConfig struct {
 	Host     string
 	Port     int
@@ -78,7 +67,7 @@ func SetupDatabase(c *DatabaseConfig) (*sql.DB, error) {
 	return db, nil
 }
 
-func CleanDatabase(db Database) (sql.Result, error) {
+func CleanDatabase(db *sql.DB) (sql.Result, error) {
 	res, err := db.Exec("TRUNCATE TABLE banners")
 	if err != nil {
 		return nil, err

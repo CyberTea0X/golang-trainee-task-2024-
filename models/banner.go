@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 
@@ -27,7 +28,7 @@ type BannerFilter struct {
 	TagId     *int64
 }
 
-func GetBanner(db Database, tagId, featureId int64) (*Banner, error) {
+func GetBanner(db *sql.DB, tagId, featureId int64) (*Banner, error) {
 	const query = "SELECT id, \"content\", tag_ids, is_active FROM banners" +
 		" WHERE $1 = ANY(tag_ids) AND feature_id=$2 LIMIT 1"
 	row := db.QueryRow(query, tagId, featureId)
@@ -41,7 +42,7 @@ func GetBanner(db Database, tagId, featureId int64) (*Banner, error) {
 	return b, nil
 }
 
-func (b *Banner) GetBanners(db Database, filter *BannerFilter, limit *int, offset *int) ([]Banner, error) {
+func (b *Banner) GetBanners(db *sql.DB, filter *BannerFilter, limit *int, offset *int) ([]Banner, error) {
 	qb := new(strings.Builder)
 	qb.WriteString("SELECT * FROM banners")
 	filters := []string{}
@@ -64,7 +65,7 @@ func (b *Banner) GetBanners(db Database, filter *BannerFilter, limit *int, offse
 	return []Banner{}, nil
 }
 
-func (b *Banner) InsertToDB(db Database) (int64, error) {
+func (b *Banner) InsertToDB(db *sql.DB) (int64, error) {
 	const query = "INSERT INTO banners (id, \"content\", feature_id, tag_ids, is_active)" +
 		"VALUES (DEFAULT,$1,$2,$3,$4) RETURNING id"
 	var lastInsertId int64
@@ -76,7 +77,7 @@ func (b *Banner) InsertToDB(db Database) (int64, error) {
 	return lastInsertId, nil
 }
 
-func PatchBanner(db Database, id int64, patch *BannerPatch) error {
+func PatchBanner(db *sql.DB, id int64, patch *BannerPatch) error {
 	params := []any{}
 	columns := []string{}
 	if patch.Content != nil {
@@ -111,7 +112,7 @@ func PatchBanner(db Database, id int64, patch *BannerPatch) error {
 	return nil
 }
 
-func DeleteBanner(db Database, id int64) error {
+func DeleteBanner(db *sql.DB, id int64) error {
 	const query = "DELETE FROM banners WHERE id=$1"
 	_, err := db.Exec(query, id)
 	if err != nil {
