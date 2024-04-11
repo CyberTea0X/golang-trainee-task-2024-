@@ -18,7 +18,7 @@ func (p *PublicController) deleteBanner(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": models.ErrInvalidId.Error()})
 		return
 	}
-	err = models.DeleteBannerFromDB(p.db, id)
+	err = models.DeleteBanner(p.db, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": models.ErrInternal.Error()})
 		log.Println(err)

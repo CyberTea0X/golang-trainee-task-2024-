@@ -12,7 +12,7 @@ import (
 func TestDeleteBannerSucceed(t *testing.T) {
 	pCtrl, router := SetupE2ETest(t)
 	banner := newTestBanner()
-	id, err := banner.InsertToDB(pCtrl.db)
+	id, err := banner.Insert(pCtrl.db)
 	if err != nil {
 		t.Fatal(err)
 	}

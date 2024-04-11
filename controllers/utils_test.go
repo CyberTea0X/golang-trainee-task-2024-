@@ -13,12 +13,12 @@ const (
 )
 
 func newTestBanner() *models.Banner {
-	return &models.Banner{
-		TagIds:    []int{1, 2, 3},
-		Content:   "{\"text\": \"Только сегодня и только у нас, скидка 99.9%...\"}",
-		FeatureId: 0,
-		IsActive:  false,
-	}
+	banner := new(models.Banner)
+	banner.TagIds = []int{1, 2, 3}
+	banner.Content = "{\"text\": \"Только сегодня и только у нас, скидка 99.9%...\"}"
+	banner.FeatureId = 0
+	banner.IsActive = false
+	return banner
 }
 
 func SetupE2ETest(t *testing.T) (*PublicController, *gin.Engine) {

@@ -3,7 +3,6 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"gobanner/models"
 	"net/http"
 	"net/http/httptest"
@@ -18,7 +17,6 @@ func TestCreateBannerSucceed(t *testing.T) {
 	w := httptest.NewRecorder()
 	banner := newTestBanner()
 	body, err := json.Marshal(banner)
-	fmt.Println(string(body))
 	if err != nil {
 		t.Fatal(err)
 	}
