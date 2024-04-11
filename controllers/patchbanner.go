@@ -10,10 +10,10 @@ import (
 )
 
 type patchBannerInput struct {
-	TagIds     []int64 `json:"tag_ids"`
-	Feature_id *int    `json:"feature_id"`
-	Content    *string `json:"content"`
-	IsActive   *bool   `json:"is_active"`
+	TagIds    []int64 `json:"tag_ids"`
+	FeatureId *int64  `json:"feature_id"`
+	Content   *string `json:"content"`
+	IsActive  *bool   `json:"is_active"`
 }
 
 func (p *PublicController) patchBanner(c *gin.Context) {
@@ -32,7 +32,7 @@ func (p *PublicController) patchBanner(c *gin.Context) {
 	}
 	patch := &models.BannerPatch{
 		TagIds:    i.TagIds,
-		FeatureId: i.Feature_id,
+		FeatureId: i.FeatureId,
 		Content:   i.Content,
 		IsActive:  i.IsActive,
 	}

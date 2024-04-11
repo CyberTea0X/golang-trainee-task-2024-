@@ -17,21 +17,14 @@ type Banner struct {
 
 type BannerPatch struct {
 	TagIds    pq.Int64Array
-	FeatureId *int
+	FeatureId *int64
 	Content   *string
 	IsActive  *bool
 }
 
-func (b *Banner) InsertToDB(db Database) (int64, error) {
-	const query = "INSERT INTO banners (id, \"content\", feature_id, tag_ids, is_active)" +
-		"VALUES (DEFAULT,$1,$2,$3,$4) RETURNING id"
-	var lastInsertId int64
-	row := db.QueryRow(query, b.Content, b.FeatureId, pq.Array(b.TagIds), b.IsActive)
-	err := row.Scan(&lastInsertId)
-	if err != nil {
-		return 0, err
-	}
-	return lastInsertId, nil
+type BannerFilter struct {
+	FeatureId *int64
+	TagId     *int64
 }
 
 func GetBanner(db Database, tagId, featureId int64) (*Banner, error) {
@@ -46,6 +39,41 @@ func GetBanner(db Database, tagId, featureId int64) (*Banner, error) {
 		return nil, err
 	}
 	return b, nil
+}
+
+func (b *Banner) GetBanners(db Database, filter *BannerFilter, limit *int, offset *int) ([]Banner, error) {
+	qb := new(strings.Builder)
+	qb.WriteString("SELECT * FROM banners")
+	filters := []string{}
+	if filter.FeatureId != nil {
+		filters = append(filters, fmt.Sprintf("feature_id = %d", *filter.FeatureId))
+	}
+	if filter.TagId != nil {
+		filters = append(filters, fmt.Sprintf("%d = ANY(tag_ids)", *filter.TagId))
+	}
+	if len(filters) > 0 {
+		qb.WriteString(" WHERE ")
+		qb.WriteString(strings.Join(filters, " AND "))
+	}
+	if limit != nil {
+		qb.WriteString(fmt.Sprintf(" LIMIT %d", *limit))
+	}
+	if offset != nil {
+		qb.WriteString(fmt.Sprintf(" OFFSET %d", *offset))
+	}
+	return []Banner{}, nil
+}
+
+func (b *Banner) InsertToDB(db Database) (int64, error) {
+	const query = "INSERT INTO banners (id, \"content\", feature_id, tag_ids, is_active)" +
+		"VALUES (DEFAULT,$1,$2,$3,$4) RETURNING id"
+	var lastInsertId int64
+	row := db.QueryRow(query, b.Content, b.FeatureId, pq.Array(b.TagIds), b.IsActive)
+	err := row.Scan(&lastInsertId)
+	if err != nil {
+		return 0, err
+	}
+	return lastInsertId, nil
 }
 
 func PatchBanner(db Database, id int64, patch *BannerPatch) error {
