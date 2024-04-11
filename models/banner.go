@@ -34,8 +34,7 @@ func (b *Banner) InsertToDB(db Database) (int64, error) {
 	return lastInsertId, nil
 }
 
-func GetBanner(db Database, tagId, featureId int64, latest bool) (*Banner, error) {
-	// Пока что игнорируем latest
+func GetBanner(db Database, tagId, featureId int64) (*Banner, error) {
 	const query = "SELECT id, \"content\", tag_ids, is_active FROM banners" +
 		" WHERE $1 = ANY(tag_ids) AND feature_id=$2 LIMIT 1"
 	row := db.QueryRow(query, tagId, featureId)

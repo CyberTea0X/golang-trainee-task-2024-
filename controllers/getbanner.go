@@ -15,13 +15,14 @@ type getBannerInput struct {
 	UseLastRevision bool `json:"use_last_revision"`
 }
 
+// Пока что игнорируем use_last_revision
 func (p *PublicController) getBanner(c *gin.Context) {
 	var i getBannerInput
 	if err := c.ShouldBindJSON(&i); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": models.ErrInvalidJson.Error()})
 		return
 	}
-	banner, err := models.GetBanner(p.db, *i.TagId, *i.FeatureId, i.UseLastRevision)
+	banner, err := models.GetBanner(p.db, *i.TagId, *i.FeatureId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": models.ErrInternal.Error()})
 		log.Println(err)
