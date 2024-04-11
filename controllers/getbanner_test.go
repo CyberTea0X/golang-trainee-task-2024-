@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
+	"gobanner/models"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -37,4 +38,8 @@ func TestGetBannerSucceed(t *testing.T) {
 		t.Fatal(err)
 	}
 	assert.Equal(t, banner.Content, string(resBody))
+	_, err = models.CleanDatabase(pCtrl.db)
+	if err != nil {
+		t.Fatal(err)
+	}
 }

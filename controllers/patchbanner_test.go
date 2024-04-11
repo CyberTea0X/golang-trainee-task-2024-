@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"gobanner/models"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -33,4 +34,8 @@ func TestPatchBannerSucceed(t *testing.T) {
 
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
+	_, err = models.CleanDatabase(pCtrl.db)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
