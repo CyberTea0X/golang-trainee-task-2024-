@@ -11,12 +11,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func addr[T any](v T) *T { return &v }
-
 func TestPatchBannerSucceed(t *testing.T) {
 	pCtrl, router := SetupE2ETest(t)
 	banner := newTestBanner()
-	id, err := banner.Insert(pCtrl.db)
+	id, err := banner.InsertToDB(pCtrl.db)
 	if err != nil {
 		t.Fatal(err)
 	}

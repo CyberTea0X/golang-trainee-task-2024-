@@ -30,8 +30,6 @@ func (p *PublicController) patchBanner(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": models.ErrInvalidJson.Error()})
 		return
 	}
-	fmt.Println("Ebanniy rot")
-	fmt.Println(i)
 	patch := &models.BannerPatch{
 		TagIds:    i.TagIds,
 		FeatureId: i.Feature_id,

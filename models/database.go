@@ -10,6 +10,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// Используются массивы т.к. они быстрее в случае нашего сервиса.
+// Использование дополнительной таблицы будет менее эффективно, хотя бы из-за join-ов
+// Если интересно или есть сомнения насчёт 1НФ, вот статья и бенчмарки которые я нашёл:
+// http://www.databasesoup.com/2015/01/tag-all-things.html
+// http://www.databasesoup.com/2015/01/tag-all-things-part-2.html
 const bannersDDL = `CREATE TABLE IF NOT EXISTS public.banners (
     id serial4 NOT NULL,
     "content" json NOT NULL,

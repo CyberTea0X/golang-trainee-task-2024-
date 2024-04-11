@@ -12,9 +12,11 @@ const (
 	AdminToken = "admin_token"
 )
 
+func addr[T any](v T) *T { return &v }
+
 func newTestBanner() *models.Banner {
 	banner := new(models.Banner)
-	banner.TagIds = []int{1, 2, 3}
+	banner.TagIds = []int64{1, 2, 3}
 	banner.Content = "{\"text\": \"Только сегодня и только у нас, скидка 99.9%...\"}"
 	banner.FeatureId = 0
 	banner.IsActive = false

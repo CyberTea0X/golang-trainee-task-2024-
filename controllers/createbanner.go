@@ -9,8 +9,8 @@ import (
 )
 
 type createBannerInput struct {
-	TagIds    []int   `json:"tag_ids" binding:"required"`
-	FeatureId *int    `json:"feature_id" binding:"required"`
+	TagIds    []int64 `json:"tag_ids" binding:"required"`
+	FeatureId *int64  `json:"feature_id" binding:"required"`
 	Content   *string `json:"content" binding:"required"`
 	IsActive  *bool   `json:"is_active" binding:"required"`
 }
@@ -26,7 +26,7 @@ func (p *PublicController) createBanner(c *gin.Context) {
 	banner.FeatureId = *i.FeatureId
 	banner.Content = *i.Content
 	banner.IsActive = *i.IsActive
-	id, err := banner.Insert(p.db)
+	id, err := banner.InsertToDB(p.db)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": models.ErrInternal.Error()})
 		log.Println(err)

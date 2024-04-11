@@ -9,10 +9,10 @@ import (
 
 type Banner struct {
 	Id        int64
-	TagIds    []int  `json:"tag_ids"`
-	FeatureId int    `json:"feature_id"`
-	Content   string `json:"content"`
-	IsActive  bool   `json:"is_active"`
+	TagIds    []int64 `json:"tag_ids"`
+	FeatureId int64   `json:"feature_id"`
+	Content   string  `json:"content"`
+	IsActive  bool    `json:"is_active"`
 }
 
 type BannerPatch struct {
@@ -22,7 +22,7 @@ type BannerPatch struct {
 	IsActive  *bool
 }
 
-func (b *Banner) Insert(db Database) (int64, error) {
+func (b *Banner) InsertToDB(db Database) (int64, error) {
 	const query = "INSERT INTO banners (id, \"content\", feature_id, tag_ids, is_active)" +
 		"VALUES (DEFAULT,$1,$2,$3,$4) RETURNING id"
 	var lastInsertId int64
@@ -32,6 +32,21 @@ func (b *Banner) Insert(db Database) (int64, error) {
 		return 0, err
 	}
 	return lastInsertId, nil
+}
+
+func GetBanner(db Database, tagId, featureId int64, latest bool) (*Banner, error) {
+	// Пока что игнорируем latest
+	const query = "SELECT id, \"content\", tag_ids, is_active FROM banners" +
+		" WHERE $1 = ANY(tag_ids) AND feature_id=$2 LIMIT 1"
+	row := db.QueryRow(query, tagId, featureId)
+	b := new(Banner)
+	b.FeatureId = featureId
+	tags := pq.Int64Array(b.TagIds)
+	err := row.Scan(&b.Id, &b.Content, &tags, &b.IsActive)
+	if err != nil {
+		return nil, err
+	}
+	return b, nil
 }
 
 func PatchBanner(db Database, id int64, patch *BannerPatch) error {
@@ -62,7 +77,6 @@ func PatchBanner(db Database, id int64, patch *BannerPatch) error {
 		qb.WriteString(fmt.Sprintf(", %s = $%d", columns[i], i+1))
 	}
 	qb.WriteString(fmt.Sprintf(" WHERE id = %d", id))
-	fmt.Println(qb.String())
 	_, err := db.Exec(qb.String(), params...)
 	if err != nil {
 		return err
