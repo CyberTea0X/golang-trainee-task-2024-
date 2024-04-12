@@ -19,7 +19,7 @@ func newTestBanner() *models.Banner {
 	banner.TagIds = []int64{1, 2, 3}
 	banner.Content = "{\"text\": \"Только сегодня и только у нас, скидка 99.9%...\"}"
 	banner.FeatureId = 0
-	banner.IsActive = false
+	banner.IsActive = true
 	return banner
 }
 

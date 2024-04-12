@@ -41,7 +41,7 @@ type BannerRow struct {
 
 func GetBanner(db *sql.DB, tagId, featureId int64) (*Banner, error) {
 	const query = "SELECT id, \"content\", tag_ids, is_active FROM banners" +
-		" WHERE $1 = ANY(tag_ids) AND feature_id=$2 LIMIT 1"
+		" WHERE $1 = ANY(tag_ids) AND feature_id=$2 AND is_active=true LIMIT 1"
 	row := db.QueryRow(query, tagId, featureId)
 	b := new(Banner)
 	b.FeatureId = featureId
