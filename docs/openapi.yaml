@@ -137,6 +137,15 @@ paths:
                       type: string
                       format: date-time
                       description: Дата обновления баннера
+        '400':
+          description: Некорректные данные
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '401':
           description: Пользователь не авторизован
         '403':
