@@ -20,6 +20,7 @@ func SetupRouter(p *PublicController) *gin.Engine {
 	r := gin.Default()
 	admin := r.Group("/")
 	admin.Use(middleware.AdminAuth())
+	admin.GET("/banner", p.getBanners)
 	admin.POST("/banner", p.createBanner)
 	admin.DELETE("/banner/:id", p.deleteBanner)
 	admin.PATCH("/banner/:id", p.patchBanner)

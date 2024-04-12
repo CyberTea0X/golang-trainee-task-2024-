@@ -30,7 +30,7 @@ func TestGetBannerSucceed(t *testing.T) {
 	r := bytes.NewReader(body)
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/user_banner", r)
-	req.Header.Add("token", AdminToken)
+	req.Header.Add("token", UserToken)
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 	resBody, err := io.ReadAll(w.Body)

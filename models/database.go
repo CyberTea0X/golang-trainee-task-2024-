@@ -21,6 +21,8 @@ const bannersDDL = `CREATE TABLE IF NOT EXISTS public.banners (
     feature_id int4 NOT NULL,
     tag_ids _int4 NOT NULL,
     is_active bool NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT banners_pk PRIMARY KEY (id)
 );`
 

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/lib/pq"
 )
@@ -28,23 +29,32 @@ type BannerFilter struct {
 	TagId     *int64
 }
 
+type BannerRow struct {
+	Id        int64
+	TagIds    []int64   `json:"tag_ids"`
+	FeatureId int64     `json:"feature_id"`
+	Content   string    `json:"content"`
+	IsActive  bool      `json:"is_active"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 func GetBanner(db *sql.DB, tagId, featureId int64) (*Banner, error) {
 	const query = "SELECT id, \"content\", tag_ids, is_active FROM banners" +
 		" WHERE $1 = ANY(tag_ids) AND feature_id=$2 LIMIT 1"
 	row := db.QueryRow(query, tagId, featureId)
 	b := new(Banner)
 	b.FeatureId = featureId
-	tags := pq.Int64Array(b.TagIds)
-	err := row.Scan(&b.Id, &b.Content, &tags, &b.IsActive)
+	err := row.Scan(&b.Id, &b.Content, pq.Array(&b.TagIds), &b.IsActive)
 	if err != nil {
 		return nil, err
 	}
 	return b, nil
 }
 
-func (b *Banner) GetBanners(db *sql.DB, filter *BannerFilter, limit *int, offset *int) ([]Banner, error) {
+func GetBanners(db *sql.DB, filter *BannerFilter, limit, offset *int64) ([]BannerRow, error) {
 	qb := new(strings.Builder)
-	qb.WriteString("SELECT * FROM banners")
+	qb.WriteString("SELECT id, \"content\", feature_id, tag_ids, is_active, created_at, updated_at FROM banners")
 	filters := []string{}
 	if filter.FeatureId != nil {
 		filters = append(filters, fmt.Sprintf("feature_id = %d", *filter.FeatureId))
@@ -62,7 +72,20 @@ func (b *Banner) GetBanners(db *sql.DB, filter *BannerFilter, limit *int, offset
 	if offset != nil {
 		qb.WriteString(fmt.Sprintf(" OFFSET %d", *offset))
 	}
-	return []Banner{}, nil
+	banners := make([]BannerRow, 0)
+	rows, err := db.Query(qb.String())
+	for rows.Next() {
+		b := BannerRow{}
+		err := rows.Scan(&b.Id, &b.Content, &b.FeatureId, pq.Array(&b.TagIds), &b.IsActive, &b.CreatedAt, &b.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+		banners = append(banners, b)
+	}
+	if rows.Err() != nil {
+		return nil, err
+	}
+	return banners, nil
 }
 
 func (b *Banner) InsertToDB(db *sql.DB) (int64, error) {
