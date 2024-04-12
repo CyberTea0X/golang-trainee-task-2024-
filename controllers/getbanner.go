@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"database/sql"
+	"errors"
 	"gobanner/models"
 	"log"
 	"net/http"
@@ -23,6 +25,10 @@ func (p *PublicController) getBanner(c *gin.Context) {
 		return
 	}
 	banner, err := models.GetBanner(p.db, *i.TagId, *i.FeatureId)
+	if errors.Is(err, sql.ErrNoRows) {
+		c.Status(http.StatusNotFound)
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": models.ErrInternal.Error()})
 		log.Println(err)
