@@ -1,4 +1,4 @@
-module gobanner
+module gobanners
 
 go 1.21.6
 

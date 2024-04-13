@@ -3,7 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"gobanner/models"
+	"gobanners/models"
 	"net/http"
 	"net/http/httptest"
 	"testing"

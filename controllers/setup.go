@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"database/sql"
-	middleware "gobanner/middlewares"
+	middleware "gobanners/middlewares"
 
 	"github.com/gin-gonic/gin"
 )

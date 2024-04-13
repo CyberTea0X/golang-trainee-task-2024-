@@ -3,7 +3,7 @@ package controllers
 import (
 	"errors"
 	"fmt"
-	"gobanner/models"
+	"gobanners/models"
 	"log"
 	"net/http"
 

@@ -1,8 +1,8 @@
 FROM alpine
 
-WORKDIR banners
-COPY gobanner .
+WORKDIR gobanners
+COPY gobanners .
 
 ENV PORT=$8080
-CMD ["./gobanner"]
+CMD ["./gobanners"]
 EXPOSE 8080

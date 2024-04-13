@@ -11,4 +11,4 @@ build:
 	go build -ldflags '-linkmode external -w -extldflags "-static"' .
 
 docker-build: build
-	docker build . -t cybertea0x/gobanner:latest
+	docker build . -t cybertea0x/gobanners:latest

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -58,15 +59,20 @@ func SetupDatabase(c *DatabaseConfig) (*sql.DB, error) {
 		"postgres://%s:%s@%s:%d/%s?sslmode=%s",
 		c.User, c.Password, c.Host, c.Port, c.Dbname, c.SSLmode,
 	)
+	log.Println(url)
 	db, err := sql.Open("postgres", url)
 	if err != nil {
 		return nil, errors.Join(errors.New("failed to connect to the database"), err)
 	}
-	_, err = db.Exec(bannersDDL)
-	if err != nil {
-		return nil, errors.Join(errors.New("failed to automigrate to the database"), err)
-	}
 	return db, nil
+}
+
+func MigrateDatabase(db *sql.DB) error {
+	_, err := db.Exec(bannersDDL)
+	if err != nil {
+		return errors.Join(errors.New("failed to automigrate to the database"), err)
+	}
+	return nil
 }
 
 func CleanDatabase(db *sql.DB) error {

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"gobanner/models"
+	"gobanners/models"
 	"io"
 	"net/http"
 	"net/http/httptest"

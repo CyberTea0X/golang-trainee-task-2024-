@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"gobanner/models"
+	"gobanners/models"
 	"net/http"
 	"net/http/httptest"
 	"testing"

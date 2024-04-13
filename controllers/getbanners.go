@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"gobanner/models"
+	"gobanners/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

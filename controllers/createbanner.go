@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"gobanner/models"
+	"gobanners/models"
 	"log"
 	"net/http"
 

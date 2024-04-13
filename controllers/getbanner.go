@@ -3,7 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"errors"
-	"gobanner/models"
+	"gobanners/models"
 	"log"
 	"net/http"
 
