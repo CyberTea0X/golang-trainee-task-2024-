@@ -5,7 +5,7 @@
 *.env
 
 # output binary
-/gobanner
+/gobanners
 
 # Binaries for programs and plugins
 *.exe
