@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"bytes"
 	"encoding/json"
 	"gobanner/models"
 	"io"
@@ -26,19 +25,15 @@ func TestGetBannersSucceed(t *testing.T) {
 		}
 	}
 
-	i := new(getBannersInput)
-	i.TagId = addr(int64(1))
-	i.FeatureId = addr(int64(0))
-	i.Offset = addr(int64(0))
-	i.Limit = addr(int64(2))
-	body, err := json.Marshal(i)
-	if err != nil {
-		t.Fatal(err)
-	}
-	r := bytes.NewReader(body)
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/banner", r)
+	req, _ := http.NewRequest("GET", "/banner", nil)
+	q := req.URL.Query()
+	q.Add("tag_id", "1")
+	q.Add("feature_id", "0")
+	q.Add("offset", "0")
+	q.Add("limit", "2")
+	req.URL.RawQuery = q.Encode()
 	req.Header.Add("token", AdminToken)
+	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 	resBody, err := io.ReadAll(w.Body)
@@ -50,10 +45,10 @@ func TestGetBannersSucceed(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for i := range banners {
+	for i := range resBanners {
 		banners[i].Id = resBanners[i].Id
 	}
-	assert.Equal(t, banners, resBanners)
+	assert.Equal(t, banners[:2], resBanners)
 	err = models.CleanDatabase(pCtrl.db)
 	if err != nil {
 		t.Fatal(err)

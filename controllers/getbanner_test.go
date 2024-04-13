@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"gobanner/models"
 	"io"
@@ -44,17 +42,13 @@ func TestGetBanner(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			i := new(getBannerInput)
-			i.TagId = addr(tc.banner.TagIds[0])
-			i.FeatureId = addr(tc.banner.FeatureId)
-			i.UseLastRevision = true
-			body, err := json.Marshal(i)
-			if err != nil {
-				t.Fatal(err)
-			}
-			r := bytes.NewReader(body)
 			w := httptest.NewRecorder()
-			req, _ := http.NewRequest("GET", "/user_banner", r)
+			req, _ := http.NewRequest("GET", "/user_banner", nil)
+			q := req.URL.Query()
+			q.Add("tag_id", fmt.Sprint(tc.banner.TagIds[0]))
+			q.Add("feature_id", fmt.Sprint(tc.banner.FeatureId))
+			q.Add("use_last_revision", "true")
+			req.URL.RawQuery = q.Encode()
 			req.Header.Add("token", UserToken)
 			router.ServeHTTP(w, req)
 			assert.Equal(t, tc.expectedCode, w.Code)

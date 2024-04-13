@@ -11,17 +11,17 @@ import (
 )
 
 type getBannerInput struct {
-	TagId     *int64 `json:"tag_id" binding:"required"`
-	FeatureId *int64 `json:"feature_id" binding:"required"`
+	TagId     *int64 `form:"tag_id" binding:"required"`
+	FeatureId *int64 `form:"feature_id" binding:"required"`
 	// Если не указан то будет присвоено стандартное значение bool - false
-	UseLastRevision bool `json:"use_last_revision"`
+	UseLastRevision bool `form:"use_last_revision"`
 }
 
 // Пока что игнорируем use_last_revision
 func (p *PublicController) getBanner(c *gin.Context) {
 	var i getBannerInput
-	if err := c.ShouldBindJSON(&i); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": models.ErrInvalidJson.Error()})
+	if err := c.ShouldBindQuery(&i); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": models.ErrInvalidQuery.Error()})
 		return
 	}
 	banner, err := models.GetBanner(p.db, *i.TagId, *i.FeatureId)
