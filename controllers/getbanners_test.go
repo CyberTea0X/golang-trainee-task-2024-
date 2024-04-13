@@ -54,7 +54,7 @@ func TestGetBannersSucceed(t *testing.T) {
 		banners[i].Id = resBanners[i].Id
 	}
 	assert.Equal(t, banners, resBanners)
-	_, err = models.CleanDatabase(pCtrl.db)
+	err = models.CleanDatabase(pCtrl.db)
 	if err != nil {
 		t.Fatal(err)
 	}

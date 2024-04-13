@@ -59,7 +59,7 @@ func TestGetBanner(t *testing.T) {
 			router.ServeHTTP(w, req)
 			assert.Equal(t, tc.expectedCode, w.Code)
 			if tc.mustfail {
-				_, err = models.CleanDatabase(pCtrl.db)
+				err = models.CleanDatabase(pCtrl.db)
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -70,7 +70,7 @@ func TestGetBanner(t *testing.T) {
 				t.Fatal(err)
 			}
 			assert.Equal(t, tc.banner.Content, string(resBody))
-			_, err = models.CleanDatabase(pCtrl.db)
+			err = models.CleanDatabase(pCtrl.db)
 			if err != nil {
 				t.Fatal(err)
 			}

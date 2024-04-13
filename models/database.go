@@ -69,10 +69,10 @@ func SetupDatabase(c *DatabaseConfig) (*sql.DB, error) {
 	return db, nil
 }
 
-func CleanDatabase(db *sql.DB) (sql.Result, error) {
-	res, err := db.Exec("TRUNCATE TABLE banners")
+func CleanDatabase(db *sql.DB) error {
+	_, err := db.Exec("TRUNCATE TABLE banners")
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return res, nil
+	return nil
 }

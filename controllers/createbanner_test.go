@@ -25,7 +25,7 @@ func TestCreateBannerSucceed(t *testing.T) {
 	req.Header.Add("token", AdminToken)
 	router.ServeHTTP(w, req)
 	assert.Equal(t, 201, w.Code)
-	_, err = models.CleanDatabase(pCtrl.db)
+	err = models.CleanDatabase(pCtrl.db)
 	if err != nil {
 		t.Fatal(err)
 	}

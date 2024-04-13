@@ -34,7 +34,7 @@ func TestPatchBannerSucceed(t *testing.T) {
 
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
-	_, err = models.CleanDatabase(pCtrl.db)
+	err = models.CleanDatabase(pCtrl.db)
 	if err != nil {
 		t.Fatal(err)
 	}
