@@ -6,3 +6,9 @@ docs:
 
 start-db:
 	docker run --rm --name postgres -e POSTGRES_PASSWORD=test -d -p 5432:5432 postgres
+
+build:
+	go build -ldflags '-linkmode external -w -extldflags "-static"' .
+
+docker-build: build
+	docker build . -t cybertea0x/gobanner:latest

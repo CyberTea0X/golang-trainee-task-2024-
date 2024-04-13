@@ -3,6 +3,10 @@
 #
 # Dotenv
 *.env
+
+# output binary
+/gobanner
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
