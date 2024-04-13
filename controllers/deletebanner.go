@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"gobanner/models"
 	"log"
@@ -19,6 +20,10 @@ func (p *PublicController) deleteBanner(c *gin.Context) {
 		return
 	}
 	err = models.DeleteBanner(p.db, id)
+	if errors.Is(models.ErrSqlNoRowsDeleted, err) {
+		c.Status(http.StatusNotFound)
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": models.ErrInternal.Error()})
 		log.Println(err)

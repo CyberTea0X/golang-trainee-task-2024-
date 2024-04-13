@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"gobanner/models"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -22,4 +23,10 @@ func TestDeleteBannerSucceed(t *testing.T) {
 
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusNoContent, w.Code)
+	w = httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	if err := models.CleanDatabase(pCtrl.db); err != nil {
+		t.Fatal(err)
+	}
 }

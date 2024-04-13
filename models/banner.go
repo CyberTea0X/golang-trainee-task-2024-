@@ -137,9 +137,16 @@ func PatchBanner(db *sql.DB, id int64, patch *BannerPatch) error {
 
 func DeleteBanner(db *sql.DB, id int64) error {
 	const query = "DELETE FROM banners WHERE id=$1"
-	_, err := db.Exec(query, id)
+	res, err := db.Exec(query, id)
 	if err != nil {
 		return err
+	}
+	count, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if count == 0 {
+		return ErrSqlNoRowsDeleted
 	}
 	return nil
 }
