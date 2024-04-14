@@ -30,4 +30,4 @@ func tokenAuth(validTokens []string) gin.HandlerFunc {
 }
 
 func AdminAuth() gin.HandlerFunc { return tokenAuth([]string{"admin_token"}) }
-func UserAuth() gin.HandlerFunc  { return tokenAuth([]string{"user_token"}) }
+func UserAuth() gin.HandlerFunc  { return tokenAuth([]string{"user_token", "admin_token"}) }
