@@ -7,8 +7,10 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - "postgres"
+    environment:
+      PORT: "${PORT}"
     ports:
-      - "8080:8080"
+      - "${PORT:-8080}:${PORT:-8080}"
     networks:
       - mynet
     volumes:
