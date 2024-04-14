@@ -10,7 +10,7 @@ import (
 )
 
 type Banner struct {
-	Id        int64
+	Id        int64   `json:"id"`
 	TagIds    []int64 `json:"tag_ids"`
 	FeatureId int64   `json:"feature_id"`
 	Content   string  `json:"content"`
@@ -30,7 +30,7 @@ type BannerFilter struct {
 }
 
 type BannerRow struct {
-	Id        int64
+	Id        int64     `json:"id"`
 	TagIds    []int64   `json:"tag_ids"`
 	FeatureId int64     `json:"feature_id"`
 	Content   string    `json:"content"`
