@@ -127,19 +127,24 @@ func PatchBanner(db *sql.DB, id int64, patch *BannerPatch) error {
 		if err := row.Scan(); err != nil {
 			return err
 		}
-	} else {
-		var qb = new(strings.Builder)
-		qb.WriteString(fmt.Sprintf("UPDATE banners SET %s = $1", columns[0]))
-		for i := 1; i < len(params); i++ {
-			qb.WriteString(fmt.Sprintf(", %s = $%d", columns[i], i+1))
-		}
-		var placeholder int64
-		qb.WriteString(fmt.Sprintf(" WHERE id = %d RETURNING id", id))
-		row := db.QueryRow(qb.String(), params...)
-		if err := row.Scan(&placeholder); err != nil {
-			return err
-		}
+		return nil
 	}
+
+	params = append(params, time.Now())
+	columns = append(columns, "updated_at")
+
+	var qb = new(strings.Builder)
+	qb.WriteString(fmt.Sprintf("UPDATE banners SET %s = $1", columns[0]))
+	for i := 1; i < len(params); i++ {
+		qb.WriteString(fmt.Sprintf(", %s = $%d", columns[i], i+1))
+	}
+	var placeholder int64
+	qb.WriteString(fmt.Sprintf(" WHERE id = %d RETURNING id", id))
+	row := db.QueryRow(qb.String(), params...)
+	if err := row.Scan(&placeholder); err != nil {
+		return err
+	}
+
 	return nil
 }
 
