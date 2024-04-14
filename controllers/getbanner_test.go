@@ -36,7 +36,7 @@ var testCasesGetBanner = []struct {
 
 func TestGetBanner(t *testing.T) {
 	for i, tc := range testCasesGetBanner {
-		t.Run(fmt.Sprintf("test_%d_mustfail=%t", i, tc.mustfail), func(t *testing.T) {
+		t.Run(fmt.Sprintf("test_%d_mustfail=%t", i+1, tc.mustfail), func(t *testing.T) {
 			pCtrl, router := SetupE2ETest(t)
 			_, err := tc.banner.InsertToDB(pCtrl.db)
 			if err != nil {

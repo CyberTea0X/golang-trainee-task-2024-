@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -100,6 +101,7 @@ func (b *Banner) InsertToDB(db *sql.DB) (int64, error) {
 	return lastInsertId, nil
 }
 
+// Returns sql.ErrNoRows if no rows matches specified id
 func PatchBanner(db *sql.DB, id int64, patch *BannerPatch) error {
 	params := []any{}
 	columns := []string{}
@@ -119,18 +121,24 @@ func PatchBanner(db *sql.DB, id int64, patch *BannerPatch) error {
 		params = append(params, patch.IsActive)
 		columns = append(columns, "is_active")
 	}
+	log.Println(len(params))
 	if len(params) == 0 {
-		return nil
-	}
-	var qb = new(strings.Builder)
-	qb.WriteString(fmt.Sprintf("UPDATE banners SET %s = $1", columns[0]))
-	for i := 1; i < len(params); i++ {
-		qb.WriteString(fmt.Sprintf(", %s = $%d", columns[i], i+1))
-	}
-	qb.WriteString(fmt.Sprintf(" WHERE id = %d", id))
-	_, err := db.Exec(qb.String(), params...)
-	if err != nil {
-		return err
+		row := db.QueryRow("SELECT FROM banners WHERE id = $1", id)
+		if err := row.Scan(); err != nil {
+			return err
+		}
+	} else {
+		var qb = new(strings.Builder)
+		qb.WriteString(fmt.Sprintf("UPDATE banners SET %s = $1", columns[0]))
+		for i := 1; i < len(params); i++ {
+			qb.WriteString(fmt.Sprintf(", %s = $%d", columns[i], i+1))
+		}
+		var placeholder int64
+		qb.WriteString(fmt.Sprintf(" WHERE id = %d RETURNING id", id))
+		row := db.QueryRow(qb.String(), params...)
+		if err := row.Scan(&placeholder); err != nil {
+			return err
+		}
 	}
 	return nil
 }
