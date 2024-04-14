@@ -248,11 +248,11 @@ curl --location --request DELETE 'localhost:8080/banner/1' \
 
 Системная информация:
 
-OS: Arch Linux x86_64
-Kernel: 6.8.5-arch1-1
-CPU: AMD Ryzen 7 2700X (16) @ 3.700GHz
-GPU: NVIDIA GeForce GTX 1660 SUPER
-MaxMemory: 32041MiB
+ - OS: Arch Linux x86_64.
+ - Kernel: 6.8.5-arch1-1.
+ - CPU: AMD Ryzen 7 2700X (16) @ 3.700GHz.
+ - GPU: NVIDIA GeForce GTX 1660 SUPER.
+ - MaxMemory: 32041MiB.
 
 ### Бенчмарк длительностью одну секунду:
 
