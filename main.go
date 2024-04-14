@@ -11,8 +11,14 @@ import (
 
 func main() {
 	dbconf, err := models.DBConfigFromEnv(".env")
+	if err != nil {
+		panic(err)
+	}
 	log.Println("Connecting to the database..")
 	db, err := models.SetupDatabase(dbconf)
+	if err != nil {
+		panic(err)
+	}
 	for err := db.Ping(); err != nil; err = db.Ping() {
 		log.Println(err)
 		time.Sleep(time.Second)
@@ -26,5 +32,8 @@ func main() {
 	pCtrl := controllers.NewPublicController(db)
 	gin := controllers.SetupRouter(pCtrl)
 	log.Println("Gobanners starting")
-	gin.Run()
+	err = gin.Run()
+	if err != nil {
+		panic(err)
+	}
 }

@@ -33,5 +33,4 @@ func (p *PublicController) createBanner(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"banner_id": id})
-	return
 }
