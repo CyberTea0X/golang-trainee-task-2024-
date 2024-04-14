@@ -1,7 +1,6 @@
 version: '3'
 services:
   gobanners:
-    image: "cybertea0x/gobanners:latest"
     container_name: "gobanners"
     build:
       context: .
@@ -23,9 +22,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "test"
+      POSTGRES_PASSWORD: "${DBPASSWORD}"
     networks:
       - mynet
 
