@@ -5,13 +5,12 @@ import (
 	"gobanners/models"
 	"log"
 	"time"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
 	dbconf, err := models.DBConfigFromEnv(".env")
-	if err != nil {
-		panic(err)
-	}
 	log.Println("Connecting to the database..")
 	db, err := models.SetupDatabase(dbconf)
 	for err := db.Ping(); err != nil; err = db.Ping() {

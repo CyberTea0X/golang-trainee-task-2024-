@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 const (
@@ -24,12 +25,18 @@ func newTestBanner() *models.Banner {
 }
 
 func SetupE2ETest(t *testing.T) (*PublicController, *gin.Engine) {
+	if err := godotenv.Load("../.env"); err != nil {
+		t.Log(err)
+	}
 	dbconf, err := models.DBConfigFromEnv("../test.env")
 	if err != nil {
 		t.Fatal(err)
 	}
 	db, err := models.SetupDatabase(dbconf)
 	if err != nil {
+		t.Fatal(err)
+	}
+	if err = models.MigrateDatabase(db); err != nil {
 		t.Fatal(err)
 	}
 	pCtrl := NewPublicController(db)
