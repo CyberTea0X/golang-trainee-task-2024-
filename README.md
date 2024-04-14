@@ -5,6 +5,7 @@
  - Основное задание выполнено
  - Описать конфигурацию линтера: стандартная конфигурация [линтера](https://github.com/golangci/golangci-lint)
  - Реализовать интеграционное или E2E-тестирование для остальных сценариев (для всех эндпоинтов реализованы автотесты)
+ - Провести нагрузочное тестирование полученного решения и приложить результаты тестирования к решению
 
 ## Стек
 
@@ -242,6 +243,35 @@ curl --location --request DELETE 'localhost:8080/banner/1' \
 ```
 
 Пример ответа: HTTP код 204
+
+## Бенчмарки
+
+Системная информация:
+
+OS: Arch Linux x86_64
+Kernel: 6.8.5-arch1-1
+CPU: AMD Ryzen 7 2700X (16) @ 3.700GHz
+GPU: NVIDIA GeForce GTX 1660 SUPER
+MaxMemory: 32041MiB
+
+### Бенчмарк длительностью одну секунду:
+
+![Бенчмарк 1 секунда](./benchmarking/benchmark1.png)
+
+### Бенчмарк длительностью 10 секунд:
+
+![Бенчмарк 10 секунд](./benchmarking/benchmark2.png)
+
+### Пример команды для бенчмарка:
+
+```bash
+wrk -t1 \
+    -c1 \
+    -d10s \
+    'http://localhost:8080/user_banner?tag_id=1&feature_id=1&use_last_revision=false' \
+    -H 'token: user_token' \
+    -H 'Accept: application/json'
+```
 
 ## Возникшие вопросы при выполнении задания
 
