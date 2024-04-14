@@ -10,5 +10,12 @@ start-db:
 build:
 	go build -ldflags '-linkmode external -w -extldflags "-static"' .
 
-docker-build: build
+docker-build:
 	docker build . -t cybertea0x/gobanners:latest
+
+docker-run: 
+	docker run \
+    -v ./.env:/gobanners/.env \
+    --network="host" \
+    --rm cybertea0x/gobanners
+
