@@ -262,6 +262,10 @@ curl --location --request DELETE 'localhost:8080/banner/1' \
 
 ![Бенчмарк 10 секунд](./benchmarking/benchmark2.png)
 
+### Бенчмарк длительностью 10 секунд, 5000 запросов в сек:
+
+![Бенчмарк 10 секунд](./benchmarking/benchmark3.png)
+
 ### Пример команды для бенчмарка:
 
 ```bash
